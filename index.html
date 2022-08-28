@@ -1,0 +1,68 @@
+<html>
+
+<head></head>
+
+<body>
+    <div id="editor"></div>
+    <div id="updateTitle"><hr>
+    Data to be sent to backend to save to file using node.js</div>
+    <textarea id="update" rows="40" cols="70"></textarea>
+    <script>
+        // open /Applications/Google\ Chrome.app/ --args --allow-file-access-from-files
+        var fileContents = "";
+        var payload = [];
+
+        function buildPayload(){
+            makePayload(payload);
+        }
+
+        function makePayload(content){
+            document.getElementById("update").innerHTML = "";
+            for(i = 0; i < content.length; i++){
+                lineData = content[i];
+                if(lineData.includes("=")){
+                    var objContent = document.getElementById("input_"+i).value;
+                    var newContent = lineData.replace("[input_"+i+"]", objContent);
+                } else {
+                    var newContent = lineData;
+                }
+                document.getElementById("update").innerHTML += newContent + "\n";
+            }
+        }
+
+        function readTextFile(file) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function () {
+                if (rawFile.readyState === 4) {
+                    if (rawFile.status === 200 || rawFile.status == 0) {
+                        fileContents = rawFile.responseText;
+                        const result = fileContents.split(/\r?\n/);
+
+                        for(i = 0; i < result.length; i++){
+                            lineData = result[i];
+                            if(lineData.includes("=")){
+                                tmplineData = lineData.split("=");
+                                lineData = tmplineData[0] + ' = <input id="input_'+i+'" name="input_'+i+'" type="text" value="'+tmplineData[1]+'" />';
+                                payload.push(tmplineData[0]+"=[input_"+i+"]");
+                            } else {
+                                payload.push(lineData);
+                            }
+
+                            document.getElementById("editor").innerHTML += lineData + "<br>";
+                        }
+
+                        document.getElementById("editor").innerHTML += '<button onclick="buildPayload();">Save</button>';
+                    }
+                }
+            }
+            rawFile.send(null);
+        }
+
+
+        readTextFile("sample.ini");
+
+    </script>
+</body>
+
+</html>
