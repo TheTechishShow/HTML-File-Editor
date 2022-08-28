@@ -9,3 +9,6 @@ Quick job for a friend.
 
 ### Source
 ![Requirements](assets/requirements.png)
+
+### Result
+![Requirements](assets/example.gif)
