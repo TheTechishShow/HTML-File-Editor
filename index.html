@@ -22,7 +22,7 @@
                 lineData = content[i];
                 if(lineData.includes("=")){
                     var objContent = document.getElementById("input_"+i).value;
-                    var newContent = lineData.replace("[input_"+i+"]", objContent);
+                    var newContent = lineData.replace("[input_"+i+"]", " " + objContent);
                 } else {
                     var newContent = lineData;
                 }
